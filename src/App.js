@@ -1,46 +1,67 @@
 import React from 'react';
 import './App.css';
-import TodoItem from './components/todoItem'
-import TodoForm from './components/todoForm'
+import TodoItem from './components/todoItem/todoItem'
+import TodoForm from './components/todoForm/todoForm'
 
 function App() {
   // Our list of todo items and a function to update them
+  // const [todos, setTodos] = React.useState([
+  //   "Eat Dinner",
+  //   "Finish SheCodes",
+  //   "Have a shower"
+  // ])
+
   const [todos, setTodos] = React.useState([
-    "Eat Dinner",
-    "Finish SheCodes",
-    "Have a shower"
-  ])
+    { text: "Eat Dinner", isComplete: false },
+    { text: "Finish SheCode", isComplete: false },
+    { text: "Have a shower", isComplete: false }
+  ]);
+
+function completeTodo(index) {
+  const newTodos = [...todos]
+  newTodos[index].isComplete = true;
+  setTodos(newTodos);
+}
+
 
   // This will call our setTodo function, 
   // to update our list of todos
-  function addTodo(todo) {
+  //Define a function which will add a new 
+  // provided todo to our list of todos in state
+  function addTodo(text) {
     // We use spread syntax here to add our 
     // new todo to our list of old todos
-    setTodos([...todos, todo])
+    // Add todo to state:
+    setTodos([...todos, { text}])
   }
+
 
   // Our regular HTML with ReactComponents
   // We know which element is React because
   // it starts with a capital
+  
+  const removeTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+  
   return (
-    <div>
-      <h1>My Todo {todos}</h1>
-      {/* 
-        loop over each todo and render a react component
-        called <TodoItem /> with the todo as a prop
-       */}
-      {todos.map((todo, index) => {
-        return <TodoItem key={index} todo={todo} />
-      })}
-
-      {/* 
-        Render a form with a function addTodo as a property. When
-        we submit our form, the addTodo function should be called
-        above to update our list of todos
-      */}
-      <TodoForm addTodo={addTodo} />
-    </div>
-  );
+  <div className="app">
+  <div className="todo-list">
+  <h1>My todo list</h1>
+  {todos.map((todo, index) => (
+    <TodoItem
+    todo={todo}
+    index={index}
+    completeTodo={completeTodo}
+    removeTodo={removeTodo}
+    />
+  ))}
+  <TodoForm addTodo={addTodo} />
+  </div>
+  </div>
+);
 }
 
 export default App;
